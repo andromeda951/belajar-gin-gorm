@@ -12,8 +12,8 @@ func main() {
 
 	router.GET("/", rootHandler)
 	router.GET("/hello", helloHandler)
-	router.GET("/books/:id", booksHandler) // localhost:8080/books/123
-	router.GET("/query", queryHandler)     // localhost:8080/query?title=Belajar Gin
+	router.GET("/books/:id/:title", booksHandler) // localhost:8080/books/1/Golang
+	router.GET("/query", queryHandler)            // localhost:8080/query?title=Belajar Gin&price=100000
 
 	router.Run()
 }
@@ -34,16 +34,20 @@ func helloHandler(ctx *gin.Context) {
 
 func booksHandler(ctx *gin.Context) {
 	id := ctx.Param("id")
+	title := ctx.Param("title")
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"id": id,
+		"id":    id,
+		"title": title,
 	})
 }
 
 func queryHandler(ctx *gin.Context) {
 	title := ctx.Query("title")
+	price := ctx.Query("price")
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"title": title,
+		"price": price,
 	})
 }
