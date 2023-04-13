@@ -13,11 +13,13 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/", rootHandler)
-	router.GET("/hello", helloHandler)
-	router.GET("/books/:id/:title", booksHandler) // localhost:8080/books/1/Golang
-	router.GET("/query", queryHandler)            // localhost:8080/query?title=Belajar Gin&price=100000
-	router.POST("/books", postBooksHandler)
+	v1 := router.Group("/v1")
+
+	v1.GET("/", rootHandler)
+	v1.GET("/hello", helloHandler)
+	v1.GET("/books/:id/:title", booksHandler) // localhost:8080/books/1/Golang
+	v1.GET("/query", queryHandler)            // localhost:8080/query?title=Belajar Gin&price=100000
+	v1.POST("/books", postBooksHandler)
 
 	router.Run()
 }
