@@ -1,12 +1,9 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
+	"belajar-gin-gorm/handler"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -15,74 +12,11 @@ func main() {
 
 	v1 := router.Group("/v1")
 
-	v1.GET("/", rootHandler)
-	v1.GET("/hello", helloHandler)
-	v1.GET("/books/:id/:title", booksHandler) // localhost:8080/books/1/Golang
-	v1.GET("/query", queryHandler)            // localhost:8080/query?title=Belajar Gin&price=100000
-	v1.POST("/books", postBooksHandler)
+	v1.GET("/", handler.RootHandler)
+	v1.GET("/hello", handler.HelloHandler)
+	v1.GET("/books/:id/:title", handler.BooksHandler) // localhost:8080/books/1/Golang
+	v1.GET("/query", handler.QueryHandler)            // localhost:8080/query?title=Belajar Gin&price=100000
+	v1.POST("/books", handler.PostBooksHandler)
 
 	router.Run()
-}
-
-func rootHandler(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"name": "Andromeda",
-		"bio":  "Software Engineer",
-	})
-}
-
-func helloHandler(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"title":    "Hello World",
-		"subtitle": "Belajar Gin dan Gorm",
-	})
-}
-
-func booksHandler(ctx *gin.Context) {
-	id := ctx.Param("id")
-	title := ctx.Param("title")
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":    id,
-		"title": title,
-	})
-}
-
-func queryHandler(ctx *gin.Context) {
-	title := ctx.Query("title")
-	price := ctx.Query("price")
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"title": title,
-		"price": price,
-	})
-}
-
-type BookInput struct {
-	Title string      `json:"title" binding:"required"`
-	Price json.Number `json:"price" binding:"required,number"` // json.Number can take number in string json type
-}
-
-func postBooksHandler(ctx *gin.Context) {
-	var bookInput BookInput
-
-	err := ctx.ShouldBindJSON(&bookInput)
-	if err != nil {
-
-		errorMessages := []string{}
-		for _, e := range err.(validator.ValidationErrors) {
-			errorMessage := fmt.Sprintf("Error on field %s, condition %s", e.Field(), e.ActualTag())
-			errorMessages = append(errorMessages, errorMessage)
-		}
-
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": errorMessages,
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"title": bookInput.Title,
-		"price": bookInput.Price,
-	})
 }
