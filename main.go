@@ -1,8 +1,8 @@
 package main
 
 import (
+	"belajar-gin-gorm/book"
 	"belajar-gin-gorm/handler"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -13,12 +13,12 @@ import (
 func main() {
 
 	dsn := "root:@tcp(127.0.0.1:3306)/pustaka_api?charset=utf8mb4&parseTime=True&loc=Local"
-	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("DB connection error")
 	}
 
-	fmt.Println("Database connection succeed")
+	db.AutoMigrate(&book.Book{}) // create books table
 
 	router := gin.Default()
 
