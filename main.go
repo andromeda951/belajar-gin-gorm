@@ -20,8 +20,9 @@ func main() {
 
 	db.AutoMigrate(&book.Book{}) // create books table
 
-	bookRepository := book.NewRepository(db)
-	bookService := book.NewService(bookRepository)
+	// bookRepository := book.NewRepository(db)
+	fileRepository := book.NewFileRepository()
+	bookService := book.NewService(fileRepository)
 	bookHandler := handler.NewBookHandler(bookService)
 
 	router := gin.Default()
