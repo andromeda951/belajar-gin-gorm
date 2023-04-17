@@ -59,7 +59,7 @@ func (h *bookHandler) GetBook(ctx *gin.Context) {
 	})
 }
 
-func (h *bookHandler) PostBooksHandler(ctx *gin.Context) {
+func (h *bookHandler) CreateBook(ctx *gin.Context) {
 	var bookRequest book.BookRequest
 
 	err := ctx.ShouldBindJSON(&bookRequest)
@@ -86,7 +86,7 @@ func (h *bookHandler) PostBooksHandler(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data": book,
+		"data": convertToBookResponse(book),
 	})
 }
 

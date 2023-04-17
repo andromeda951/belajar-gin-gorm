@@ -3,9 +3,9 @@ package book
 import "gorm.io/gorm"
 
 type Repository interface {
-	Create(book Book) (Book, error)
 	FindAll() ([]Book, error)
 	FindById(id int) (Book, error)
+	Create(book Book) (Book, error)
 }
 
 type repository struct {
@@ -14,12 +14,6 @@ type repository struct {
 
 func NewRepository(db *gorm.DB) Repository {
 	return &repository{db}
-}
-
-func (r *repository) Create(book Book) (Book, error) {
-	err := r.db.Create(&book).Error
-
-	return book, err
 }
 
 func (r *repository) FindAll() ([]Book, error) {
@@ -34,6 +28,12 @@ func (r *repository) FindById(id int) (Book, error) {
 	var book Book
 
 	err := r.db.Find(&book, id).Error
+
+	return book, err
+}
+
+func (r *repository) Create(book Book) (Book, error) {
+	err := r.db.Create(&book).Error
 
 	return book, err
 }

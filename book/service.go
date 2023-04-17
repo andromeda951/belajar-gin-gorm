@@ -1,9 +1,9 @@
 package book
 
 type Service interface {
-	Create(bookRequest BookRequest) (Book, error)
 	FindAll() ([]Book, error)
 	FindById(id int) (Book, error)
+	Create(bookRequest BookRequest) (Book, error)
 }
 
 type service struct {
@@ -12,6 +12,16 @@ type service struct {
 
 func NewService(repository Repository) Service { // using Repository interface
 	return &service{repository: repository}
+}
+
+func (s *service) FindAll() ([]Book, error) {
+	books, err := s.repository.FindAll()
+	return books, err
+}
+
+func (s *service) FindById(id int) (Book, error) {
+	book, err := s.repository.FindById(id)
+	return book, err
 }
 
 func (s *service) Create(bookRequest BookRequest) (Book, error) {
@@ -29,14 +39,4 @@ func (s *service) Create(bookRequest BookRequest) (Book, error) {
 
 	newBook, err := s.repository.Create(book)
 	return newBook, err
-}
-
-func (s *service) FindAll() ([]Book, error) {
-	books, err := s.repository.FindAll()
-	return books, err
-}
-
-func (s *service) FindById(id int) (Book, error) {
-	book, err := s.repository.FindById(id)
-	return book, err
 }
