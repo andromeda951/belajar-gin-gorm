@@ -5,6 +5,7 @@ type Service interface {
 	FindById(id int) (Book, error)
 	Create(bookRequest BookRequest) (Book, error)
 	Update(id int, bookRequest BookRequest) (Book, error)
+	Delete(id int) (Book, error)
 }
 
 type service struct {
@@ -56,5 +57,12 @@ func (s *service) Update(id int, bookRequest BookRequest) (Book, error) {
 	book.Discount = int(discount)
 
 	newBook, err := s.repository.Update(book)
+	return newBook, err
+}
+
+func (s *service) Delete(id int) (Book, error) {
+	book, err := s.repository.FindById(id)
+
+	newBook, err := s.repository.Delete(book)
 	return newBook, err
 }
