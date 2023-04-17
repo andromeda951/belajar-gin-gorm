@@ -90,6 +90,39 @@ func (h *bookHandler) CreateBook(ctx *gin.Context) {
 	})
 }
 
+func (h *bookHandler) UpdateBook(ctx *gin.Context) {
+	var bookRequest book.BookRequest
+
+	err := ctx.ShouldBindJSON(&bookRequest)
+	if err != nil {
+
+		errorMessages := []string{}
+		for _, e := range err.(validator.ValidationErrors) {
+			errorMessage := fmt.Sprintf("Error on field %s, condition %s", e.Field(), e.ActualTag())
+			errorMessages = append(errorMessages, errorMessage)
+		}
+
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errorMessages,
+		})
+		return
+	}
+
+	idString := ctx.Param("id")
+	id, _ := strconv.Atoi(idString)
+	book, err := h.bookService.Update(id, bookRequest)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": convertToBookResponse(book),
+	})
+}
+
 func convertToBookResponse(b book.Book) book.BookResponse {
 	return book.BookResponse{
 		ID:          b.ID,
