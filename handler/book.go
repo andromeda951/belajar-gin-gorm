@@ -4,6 +4,7 @@ import (
 	"belajar-gin-gorm/book"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -44,6 +45,32 @@ func (h *bookHandler) GetBooks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"data": booksResponse,
 	})
+}
+
+func (h *bookHandler) GetBook(ctx *gin.Context) {
+	idString := ctx.Param("id")
+	id, _ := strconv.Atoi(idString)
+
+	b, err := h.bookService.FindById(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	bookResponse := book.BookResponse{
+		ID:          b.ID,
+		Title:       b.Title,
+		Description: b.Description,
+		Price:       b.Price,
+		Rating:      b.Rating,
+		Discount:    b.Discount,
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": bookResponse,
+	})	
 }
 
 func (h *bookHandler) PostBooksHandler(ctx *gin.Context) {
