@@ -21,7 +21,7 @@ func main() {
 	}
 
 	dsn := os.Getenv("MYSQL_URL")
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		log.Fatal("DB connection error")
 	}
@@ -44,5 +44,5 @@ func main() {
 	v1.DELETE("/books/:id", bookHandler.DeleteBook)
 
 	port := os.Getenv("PORT")
-	router.Run(":" + port)
+	router.Run("0.0.0.0:" + port)
 }
