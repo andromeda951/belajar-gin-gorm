@@ -1,10 +1,11 @@
 package main
 
 import (
-	"belajar-gin-gorm/book"
-	"belajar-gin-gorm/handler"
 	"log"
 	"os"
+
+	"github.com/andromeda951/belajar-gin-gorm/book"
+	"github.com/andromeda951/belajar-gin-gorm/handler"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -43,5 +44,5 @@ func main() {
 	v1.DELETE("/books/:id", bookHandler.DeleteBook)
 
 	port := os.Getenv("PORT")
-	router.Run(":"+port)
+	router.Run(":" + port)
 }

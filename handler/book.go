@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"belajar-gin-gorm/book"
+	"github.com/andromeda951/belajar-gin-gorm/book"
 	"fmt"
 	"net/http"
 	"strconv"

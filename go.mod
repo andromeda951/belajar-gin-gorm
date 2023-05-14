@@ -1,6 +1,6 @@
-module belajar-gin-gorm
+module github.com/andromeda951/belajar-gin-gorm
 
-go 1.19
+go 1.17
 
 require (
 	github.com/gin-gonic/gin v1.9.0
